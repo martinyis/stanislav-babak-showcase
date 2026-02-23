@@ -1,0 +1,90 @@
+{
+  "name": {
+    "full": "Stanislav Martin Babak",
+    "display": "Stanislav Babak",
+    "first": "Stanislav",
+    "last": "Babak"
+  },
+  "title": "Software Engineer / Full-Stack Developer",
+  "email": "martinyis11@gmail.com",
+  "phone": {
+    "display": "(603) 312-2047",
+    "tel": "+16033122047"
+  },
+  "social": {
+    "github": "https://github.com/martinyis",
+    "githubUsername": "martinyis",
+    "linkedin": "https://www.linkedin.com/in/stanislav-babak/",
+    "linkedinDisplay": "linkedin.com/in/stanislav-babak"
+  },
+  "education": {
+    "school": "University of New Hampshire",
+    "degree": "B.S. Computer Science",
+    "expectedGraduation": "2026",
+    "gpa": "3.53"
+  },
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Echo Web, LLC",
+      "period": "Jun 2023 - Sep 2023",
+      "description": [
+        "Developed responsive web applications using React.js and Next.js with TypeScript",
+        "Implemented RESTful APIs with Node.js and Express",
+        "Collaborated with UX/UI designers to implement intuitive user interfaces",
+        "Optimized application performance and ensured cross-browser compatibility"
+      ],
+      "skills": ["React.js", "Next.js", "TypeScript", "Node.js", "Express.js", "RESTful API"]
+    },
+    {
+      "title": "Web Developer",
+      "company": "University of New Hampshire",
+      "period": "Jun 2023 - Aug 2023",
+      "description": [
+        "Maintained and updated university department websites",
+        "Implemented responsive design principles to improve mobile experience",
+        "Collaborated with stakeholders to implement content updates and new features",
+        "Ensured website compliance with accessibility standards"
+      ],
+      "skills": ["HTML/CSS", "JavaScript", "Responsive Design", "CMS", "Web Accessibility"]
+    },
+    {
+      "title": "Front End Developer",
+      "company": "Freelance",
+      "period": "Current",
+      "description": [
+        "Design and develop custom websites for various clients",
+        "Create responsive, mobile-friendly interfaces using modern frameworks",
+        "Implement seamless user experiences with focus on performance and accessibility",
+        "Collaborate directly with clients to understand requirements and deliver solutions"
+      ],
+      "skills": ["React.js", "Next.js", "Tailwind CSS", "UI/UX Design", "Client Management"]
+    }
+  ],
+  "projects": [
+    {
+      "title": "MovieSensei",
+      "description": "AI-powered movie recommendation platform",
+      "github": "https://github.com/martinyis/MovieSensei",
+      "demo": "https://movie-sensei.vercel.app/",
+      "tags": ["React", "Node.js", "AI"]
+    },
+    {
+      "title": "PractApp",
+      "description": "Language learning mobile application",
+      "demo": "https://usepractapp.com",
+      "tags": ["React Native", "TypeScript", "MongoDB", "Node.js", "Express"]
+    },
+    {
+      "title": "Freelance Portfolio",
+      "description": "Custom client websites and applications",
+      "links": [
+        { "url": "https://www.samuelfarrington.com/", "title": "Samuel Farrington" },
+        { "url": "https://www.ultrafa.com/", "title": "Ultra FA" }
+      ],
+      "tags": ["React", "Next.js", "UI/UX", "Custom Design"]
+    }
+  ],
+  "resumeFile": "/MBRESUME5-AP.pdf",
+  "avatarImage": "/images/avatar.jpg"
+}
