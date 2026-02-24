@@ -1,54 +1,183 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const techStack = [
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "Python",
+const EASE = [0.25, 0.46, 0.45, 0.94] as const;
+
+const rotatingWords = [
+  "AI products",
+  "SaaS platforms",
+  "mobile apps",
+  "things that ship",
 ];
 
-const domains = [
-  "AI/LLM Integration",
-  "RAG Pipelines",
-  "React Native",
+const ROTATE_INTERVAL = 3000;
+
+/* ================================================================== */
+/* AMBIENT CODE LINES -- slowly scrolling code in the background       */
+/* ================================================================== */
+
+const codeLines = [
+  'const ai = await orchestrate({ models: ["gemini", "gpt-4", "perplexity"] });',
+  "export async function generateReport(company: string): Promise<Report> {",
+  '  const enriched = await rag.enrich(prompt, { context: "market-intel" });',
+  "  return pipeline.execute({ input: enriched, citations: true });",
+  "}",
+  "",
+  "const [analysis, setAnalysis] = useState<Analysis | null>(null);",
+  "useEffect(() => { speechRecognition.start({ lang, onResult }); }, [lang]);",
+  "",
+  'app.post("/api/v1/reports", authMiddleware, rateLimiter, validate(schema),',
+  "  async (req, res) => {",
+  "    const report = await ReportService.generate(req.body);",
+  '    res.status(201).json({ success: true, data: report });',
+  "  }",
+  ");",
+  "",
+  "const subscription = await stripe.subscriptions.create({",
+  '  customer: user.stripeId, items: [{ price: plan.priceId }],',
+  "});",
+  "",
+  "const nativeApp = () => (",
+  "  <NavigationContainer>",
+  "    <Stack.Navigator screenOptions={{ headerShown: false }}>",
+  '      <Stack.Screen name="Practice" component={PracticeScreen} />',
+  '      <Stack.Screen name="Results" component={AIFeedbackScreen} />',
+  "    </Stack.Navigator>",
+  "  </NavigationContainer>",
+  ");",
+  "",
+  'const tts = await googleCloud.textToSpeech({ text, lang: "es-ES" });',
+  "const validation = await openai.chat.completions.create({",
+  '  model: "gpt-4", messages: [{ role: "system", content: cotPrompt }],',
+  "});",
+  "",
+  "export const dbConfig = { uri: process.env.MONGO_URI, options: {",
+  "  maxPoolSize: 10, retryWrites: true, w: 'majority',",
+  "}};",
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.6,
-    },
-  },
-};
+/* Duplicate lines to create seamless loop */
+const doubledLines = [...codeLines, ...codeLines];
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20, filter: "blur(10px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const },
-  },
-};
+function CodeRain() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Left column -- scrolls up */}
+      <div
+        className="absolute left-[5%] sm:left-[8%] top-0 w-[45%] sm:w-[40%] opacity-[0.04]"
+        style={{ animation: "code-scroll-up 60s linear infinite" }}
+      >
+        <pre className="text-[10px] sm:text-xs leading-[2] text-white font-mono whitespace-pre-wrap break-all">
+          {doubledLines.join("\n")}
+        </pre>
+      </div>
 
-const domainContainerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 1.4,
-    },
+      {/* Right column -- scrolls down, offset */}
+      <div
+        className="absolute right-[5%] sm:right-[8%] bottom-0 w-[40%] sm:w-[35%] opacity-[0.03] hidden sm:block"
+        style={{ animation: "code-scroll-down 75s linear infinite" }}
+      >
+        <pre className="text-[10px] sm:text-xs leading-[2] text-white font-mono whitespace-pre-wrap break-all">
+          {[...doubledLines].reverse().join("\n")}
+        </pre>
+      </div>
+
+      {/* Gradient masks to fade edges */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent z-[1]" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent z-[1]" />
+      <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent z-[1]" />
+      <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent z-[1]" />
+    </div>
+  );
+}
+
+/* ================================================================== */
+/* FLOATING CODE FRAGMENTS -- glass cards with code snippets           */
+/* ================================================================== */
+
+const codeFragments = [
+  {
+    code: "await ai.analyze(input)",
+    x: "right-[10%]",
+    y: "top-[18%]",
+    delay: 0.5,
+    drift: 22,
   },
-};
+  {
+    code: "pipeline.execute()",
+    x: "right-[20%]",
+    y: "bottom-[28%]",
+    delay: 1.2,
+    drift: 28,
+  },
+  {
+    code: "{ model: 'gpt-4' }",
+    x: "right-[5%]",
+    y: "top-[55%]",
+    delay: 0.8,
+    drift: 18,
+  },
+];
+
+function FloatingFragments() {
+  return (
+    <div className="absolute inset-0 pointer-events-none hidden lg:block">
+      {codeFragments.map((frag, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.5 + frag.delay }}
+          className={`absolute ${frag.x} ${frag.y}`}
+        >
+          <motion.div
+            animate={{ y: [0, -frag.drift, 0] }}
+            transition={{
+              duration: 8 + i * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm"
+          >
+            <code className="text-[10px] sm:text-xs text-white/20 font-mono">
+              {frag.code}
+            </code>
+          </motion.div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ================================================================== */
+/* MAIN HERO                                                           */
+/* ================================================================== */
 
 const HeroSection = () => {
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, ROTATE_INTERVAL);
+    return () => clearInterval(timer);
+  }, []);
+
+  const scrollToWork = useCallback(() => {
+    const heroEl = document.getElementById("hero");
+    if (heroEl) {
+      const bottom = heroEl.getBoundingClientRect().bottom + window.scrollY;
+      window.scrollTo({ top: bottom, behavior: "smooth" });
+    }
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="hero"
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden"
+    >
       {/* Liquid background blobs */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -74,121 +203,114 @@ const HeroSection = () => {
         />
       </div>
 
-      {/* Subtle grain texture overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
+      {/* Scrolling code background */}
+      <CodeRain />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30, filter: "blur(20px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-white"
-        >
-          Stanislav
-          <span className="block text-white/40">Babak</span>
-        </motion.h1>
+      {/* Floating code fragments */}
+      <FloatingFragments />
 
-        {/* Role */}
-        <motion.p
-          initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mt-8 text-lg sm:text-xl text-white/50 font-light tracking-wide uppercase"
-        >
-          Full Stack Software Engineer
-        </motion.p>
+      {/* Grain texture overlay */}
+      <div className="absolute inset-0 noise-overlay opacity-[0.015] pointer-events-none z-[2]" />
 
-        {/* Tech stack */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="mt-8 flex flex-wrap items-center justify-center gap-3"
-        >
-          {techStack.map((tech) => (
-            <motion.span
-              key={tech}
-              variants={itemVariants}
-              className="px-4 py-1.5 text-sm font-medium text-white/70 border border-white/10 rounded-full
-                         backdrop-blur-sm hover:text-white hover:border-white/25 transition-colors duration-300"
-            >
-              {tech}
-            </motion.span>
-          ))}
-        </motion.div>
-
-        {/* Domain expertise */}
-        <motion.div
-          variants={domainContainerVariants}
-          initial="hidden"
-          animate="visible"
-          className="mt-4 flex flex-wrap items-center justify-center gap-3"
-        >
-          {domains.map((domain) => (
-            <motion.span
-              key={domain}
-              variants={itemVariants}
-              className="px-4 py-1.5 text-sm text-white/40 font-light"
-            >
-              {domain}
-            </motion.span>
-          ))}
-        </motion.div>
-
-        {/* Education badge */}
+      {/* Main content */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 py-24">
+        {/* Name -- small, subtle */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.8 }}
-          className="mt-6"
+          transition={{ duration: 0.8 }}
+          className="mb-12 sm:mb-16 md:mb-20"
         >
-          <span className="text-xs text-white/25 tracking-widest uppercase font-medium">
-            CS @ UNH &apos;26
+          <span className="text-xs sm:text-sm text-white/25 tracking-[0.3em] uppercase font-medium">
+            Stanislav Babak
           </span>
         </motion.div>
 
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 2.0, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mt-10 mx-auto w-16 h-px bg-white/15 origin-center"
-        />
+        {/* Main statement */}
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 30, filter: "blur(20px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
+          >
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white tracking-tight leading-[1.05]">
+              I build
+            </h1>
+          </motion.div>
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mt-8 text-base sm:text-lg text-white/35 font-light italic max-w-md mx-auto leading-relaxed"
+          {/* Rotating word */}
+          <div
+            className="h-[1.4em] relative mt-1 sm:mt-2 overflow-hidden"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[wordIndex]}
+                initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -40, filter: "blur(8px)" }}
+                transition={{ duration: 0.5, ease: EASE }}
+                className="absolute left-0 font-bold text-white/50 tracking-tight whitespace-nowrap"
+                style={{ fontSize: "inherit" }}
+              >
+                {rotatingWords[wordIndex]}
+                <span className="text-white/20">.</span>
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Info line */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.0 }}
+          className="mt-12 sm:mt-16 flex items-center gap-4"
         >
-          I build things that make people wonder
-          <br />
-          if it&apos;s magic or just code.
-        </motion.p>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, delay: 1.1, ease: EASE }}
+            className="w-8 sm:w-12 h-px bg-white/15 origin-left"
+          />
+          <span className="text-xs sm:text-sm text-white/25 tracking-[0.2em] uppercase font-medium">
+            Full Stack Engineer &middot; CS @ UNH &apos;26
+          </span>
+        </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
+      {/* Scroll prompt */}
+      <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 3.0 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ duration: 0.6, delay: 1.5 }}
+        onClick={scrollToWork}
+        className="relative z-10 flex flex-col items-center gap-3 pb-10 mx-auto cursor-pointer group"
       >
+        <span className="text-[10px] sm:text-xs text-white/20 tracking-[0.3em] uppercase font-medium group-hover:text-white/40 transition-colors duration-300">
+          See my work
+        </span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-5 h-8 border border-white/15 rounded-full flex justify-center pt-1.5"
         >
-          <motion.div className="w-1 h-1.5 bg-white/30 rounded-full" />
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="text-white/20 group-hover:text-white/40 transition-colors duration-300"
+          >
+            <path
+              d="M10 4L10 16M10 16L15 11M10 16L5 11"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </motion.div>
-      </motion.div>
+      </motion.button>
     </section>
   );
 };

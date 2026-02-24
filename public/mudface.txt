@@ -1,0 +1,5 @@
+Developed a cross-platform React Native mobile app (iOS & Android) in TypeScript featuring camera-based skin scanning, OCR-powered product label scanning, Google/Apple OAuth, Firebase push notifications, and a multi-step onboarding flow.
+Designed a microservices architecture with 15+ decoupled Django REST modules (auth, products, chatbot, search, analytics) using MongoDB, JWT auth, and Celery/Redis async workers, deployed on GCP with AWS S3.
+Integrated OpenAI and Perplexity APIs via a FastAPI microservice to power an AI chatbot, personalized skincare consultations, and ingredient research features, designing the prompt engineering and progressive report generation pipeline.
+Built web scraping pipelines (BeautifulSoup, Selenium) to aggregate 24,000+ brands, 20,000+ products, and 5,000+ ingredients; developed a product search system with MongoDB text indexing, OCR-based ingestion, and ingredient analysis.
+Built a Next.js 15 analysis platform with tRPC for end-to-end type-safe API communication, a 15-step wizard, AI chatbot, and Stripe checkout, delivering 2,000+ skincare reports.
