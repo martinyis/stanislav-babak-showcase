@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   motion,
@@ -18,59 +19,66 @@ const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 /* DATA                                                                */
 /* ================================================================== */
 
-const TASKMIND_LETTERS = "TASKMIND".split("");
+const AIRFARE_LETTERS = "AIRFARE".split("");
 
 const contributions = [
   {
     num: "01",
-    title: "Full-Stack SaaS Architecture",
-    desc: "Led system design and architecture of a full-stack AI SaaS platform with Next.js, Node.js/Express, TypeScript, and MongoDB, designing 50+ RESTful API endpoints, multi-tenant data isolation, and role-based access control with JWT authentication.",
+    title: "Flexible Date Search Engine",
+    desc: "Built a multi-date search engine that generates and queries up to 200+ date combinations per search, with smart batching and caching to reduce API costs by 90%.",
   },
   {
     num: "02",
-    title: "Multi-Model AI Orchestration",
-    desc: "Engineered a multi-model AI orchestration layer integrating Google Gemini, Perplexity AI, and OpenAI APIs to automate company research, competitive analysis, and market intelligence generation.",
+    title: "Automated Price Tracking",
+    desc: "Engineered automated price tracking with 4-hour check intervals, push notification alerts when prices drop below user-set thresholds, and historical price trend visualization.",
   },
   {
     num: "03",
-    title: "RAG Pipeline & Intelligence Engine",
-    desc: "Implemented a retrieval-augmented generation (RAG) pipeline that enriches LLM prompts with company profiles, historical report data, and industry context, producing citation-backed research outputs across 10+ report categories.",
+    title: "Credits & Monetization System",
+    desc: "Implemented a full credits economy with Apple In-App Purchase integration, 50 free starter credits, usage metering per search, and server-side receipt validation.",
   },
   {
     num: "04",
-    title: "Stripe Subscription Infrastructure",
-    desc: "Built end-to-end Stripe subscription infrastructure with tiered pricing, promotional codes, usage-based metering, and a customer self-service portal, handling the full payment lifecycle for a multi-tenant SaaS product.",
+    title: "Full-Stack Architecture",
+    desc: "Architected the complete stack with React Native/Expo frontend, Node.js/Express API, PostgreSQL with Prisma ORM, JWT authentication, and Zod request validation.",
   },
   {
     num: "05",
-    title: "GCP Deployment & CI/CD",
-    desc: "Deployed to Google Cloud Platform using App Engine with auto-scaling (1\u201310 instances) and established CI/CD pipelines via Cloud Build for automated TypeScript compilation, health checks, and zero-downtime production deployments.",
+    title: "Flight Data Pipeline",
+    desc: "Built a flight data pipeline integrating SerpAPI with 1,488 airline mappings, structured parsing of complex multi-leg itineraries, and intelligent result ranking.",
   },
 ];
 
 const stats = [
-  { value: 50, suffix: "+", label: "API Endpoints" },
-  { value: 10, suffix: "+", label: "Report Categories" },
-  { value: 3, suffix: "", label: "AI Models Integrated" },
-  { value: 10, suffix: "", label: "Auto-Scale Instances" },
-  { value: 100, suffix: "%", label: "Uptime Target" },
+  { value: 200, suffix: "+", label: "Date Combos" },
+  { value: 90, suffix: "%", label: "API Cost Reduced" },
+  { value: 4, suffix: "hr", label: "Price Checks" },
+  { value: 1488, suffix: "", label: "Airlines Mapped" },
+  { value: 50, suffix: "", label: "Free Credits" },
 ];
 
 const techTags = [
-  "Next.js",
+  "React Native",
+  "Expo",
+  "TypeScript",
   "Node.js",
   "Express",
-  "TypeScript",
-  "MongoDB",
-  "Google Gemini",
-  "Perplexity AI",
-  "OpenAI API",
-  "Stripe",
-  "GCP",
-  "App Engine",
-  "Cloud Build",
-  "JWT Auth",
-  "REST APIs",
+  "PostgreSQL",
+  "Prisma",
+  "JWT",
+  "SerpAPI",
+  "Apple IAP",
+  "Push Notifications",
+  "Zod",
+  "Vitest",
+];
+
+const screenshots = [
+  { src: "/images/skylens-home.png", alt: "Home Screen" },
+  { src: "/images/skylens-dates.png", alt: "Date Selection" },
+  { src: "/images/skylens-results.png", alt: "Search Results" },
+  { src: "/images/skylens-tracking.png", alt: "Price Tracking" },
+  { src: "/images/skylens-price-history.png", alt: "Price History" },
 ];
 
 /* ================================================================== */
@@ -217,9 +225,9 @@ function LetterReveal({
   return (
     <div
       className="flex items-center justify-center gap-[0.1em] sm:gap-[0.2em] md:gap-[0.35em]"
-      aria-label="TASKMIND"
+      aria-label="AIRFARE"
     >
-      {TASKMIND_LETTERS.map((letter, i) => {
+      {AIRFARE_LETTERS.map((letter, i) => {
         const start = i * 0.07;
         const end = start + 0.15;
         return (
@@ -264,58 +272,31 @@ function LetterChar({
 }
 
 /* ================================================================== */
-/* BROWSER VIDEO                                                       */
+/* PHONE SCREENSHOT                                                    */
 /* ================================================================== */
 
-function BrowserVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { margin: "-10% 0px -10% 0px" });
-
-  useEffect(() => {
-    if (!ref.current) return;
-    if (isInView) {
-      ref.current.play().catch(() => {});
-    } else {
-      ref.current.pause();
-    }
-  }, [isInView]);
-
+function PhoneScreenshot({ src, alt }: { src: string; alt: string }) {
   return (
     <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0, scale: 0.92 }}
-      whileInView={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 1, ease: EASE }}
-      className="relative w-full"
+      className="relative mx-auto"
+      style={{ maxWidth: 320 }}
     >
-      <div className="absolute -inset-4 sm:-inset-8 bg-white/[0.015] rounded-3xl blur-3xl pointer-events-none" />
-      <div className="relative rounded-xl sm:rounded-2xl overflow-hidden border border-white/[0.08] video-glow bg-black">
-        <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.03] border-b border-white/[0.06]">
-          <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-          </div>
-          <div className="flex-1 mx-4">
-            <div className="mx-auto max-w-xs h-5 rounded-md bg-white/[0.04] flex items-center justify-center">
-              <span className="text-[10px] text-white/20 tracking-wider font-medium">
-                taskmind.ai
-              </span>
-            </div>
-          </div>
-          <div className="w-14" />
+      <div className="absolute -inset-6 bg-white/[0.02] rounded-[3rem] blur-3xl pointer-events-none" />
+      <div className="relative rounded-[2.5rem] overflow-hidden border-2 border-white/[0.1] bg-black p-1.5">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-b-2xl z-10" />
+        <div className="rounded-[2rem] overflow-hidden bg-black">
+          <Image
+            src={src}
+            alt={alt}
+            width={390}
+            height={844}
+            className="w-full aspect-[9/19.5] object-cover"
+          />
         </div>
-        <video
-          ref={ref}
-          src={src}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          className="w-full aspect-video object-cover"
-        />
       </div>
     </motion.div>
   );
@@ -353,7 +334,7 @@ function BackNav() {
 /* MAIN CASE STUDY                                                     */
 /* ================================================================== */
 
-export default function TaskMindCaseStudy() {
+export default function AirfareCaseStudy() {
   const letterSectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: letterProgress } = useScroll({
     target: letterSectionRef,
@@ -374,6 +355,21 @@ export default function TaskMindCaseStudy() {
           ref={letterSectionRef}
           className="relative min-h-[70vh] sm:min-h-[80vh] flex flex-col items-center justify-center py-24 sm:py-32"
         >
+          {/* Personal project badge */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-4 flex items-center gap-3"
+          >
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.1] bg-white/[0.03]">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/60" />
+              <span className="text-[10px] sm:text-xs text-white/30 tracking-[0.2em] uppercase font-medium">
+                Personal Project
+              </span>
+            </div>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -381,7 +377,7 @@ export default function TaskMindCaseStudy() {
             className="mb-6 sm:mb-10"
           >
             <span className="text-[10px] sm:text-xs text-white/20 tracking-[0.35em] uppercase font-medium">
-              Team Lead Software Engineer / Startup
+              iOS App / 2025
             </span>
           </motion.div>
 
@@ -393,26 +389,124 @@ export default function TaskMindCaseStudy() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="mt-6 sm:mt-8 text-sm sm:text-base text-white/25 tracking-[0.3em] uppercase font-light"
           >
-            AI-Powered Research Platform
+            Find the Cheapest Flights
           </motion.p>
         </div>
 
         {/* -------------------------------------------------------- */}
-        {/* WEB PLATFORM VIDEO                                       */}
+        {/* PHONE SCREENSHOTS                                        */}
         {/* -------------------------------------------------------- */}
-        <div className="relative px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 pb-20 sm:pb-32">
+        <div className="pb-24 sm:pb-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-8 sm:mb-12 text-center"
+            className="mb-10 sm:mb-14 text-center"
           >
             <span className="text-[10px] sm:text-xs text-white/20 tracking-[0.35em] uppercase font-medium">
-              Web Platform
+              Mobile App
             </span>
           </motion.div>
-          <BrowserVideo src="/videos/TASKMIND.mp4" />
+          <PhoneScreenshot src="/images/skylens-home.png" alt="Airfare home screen" />
+
+          {/* Screenshot gallery */}
+          <div className="mt-16 sm:mt-24 max-w-6xl mx-auto px-6 sm:px-8 md:px-12">
+            {/* Desktop: scrollable row */}
+            <div className="hidden md:flex gap-8 overflow-x-auto scrollbar-hide pb-4" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+              {screenshots.map((shot, i) => (
+                <motion.div
+                  key={shot.src}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.7, delay: i * 0.1, ease: EASE }}
+                  className="flex-shrink-0"
+                  style={{ width: 220 }}
+                >
+                  <div className="relative">
+                    <div className="absolute -inset-4 bg-white/[0.02] rounded-[2rem] blur-2xl pointer-events-none" />
+                    <div className="relative rounded-[2rem] overflow-hidden border-2 border-white/[0.1] bg-black p-1">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-4 bg-black rounded-b-xl z-10" />
+                      <div className="rounded-[1.5rem] overflow-hidden bg-black">
+                        <Image
+                          src={shot.src}
+                          alt={shot.alt}
+                          width={390}
+                          height={844}
+                          className="w-full aspect-[9/19.5] object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-center text-xs text-white/25 tracking-wider uppercase font-medium">
+                    {shot.alt}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Mobile: 2-column grid with 5th centered */}
+            <div className="md:hidden">
+              <div className="grid grid-cols-2 gap-4">
+                {screenshots.slice(0, 4).map((shot, i) => (
+                  <motion.div
+                    key={shot.src}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.7, delay: i * 0.1, ease: EASE }}
+                  >
+                    <div className="relative">
+                      <div className="relative rounded-[1.5rem] overflow-hidden border-2 border-white/[0.1] bg-black p-1">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-3 bg-black rounded-b-lg z-10" />
+                        <div className="rounded-[1.2rem] overflow-hidden bg-black">
+                          <Image
+                            src={shot.src}
+                            alt={shot.alt}
+                            width={390}
+                            height={844}
+                            className="w-full aspect-[9/19.5] object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-center text-[10px] text-white/25 tracking-wider uppercase font-medium">
+                      {shot.alt}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+              {/* 5th screenshot centered */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.7, delay: 0.4, ease: EASE }}
+                className="mt-4 flex justify-center"
+              >
+                <div style={{ width: "50%" }}>
+                  <div className="relative">
+                    <div className="relative rounded-[1.5rem] overflow-hidden border-2 border-white/[0.1] bg-black p-1">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-3 bg-black rounded-b-lg z-10" />
+                      <div className="rounded-[1.2rem] overflow-hidden bg-black">
+                        <Image
+                          src={screenshots[4].src}
+                          alt={screenshots[4].alt}
+                          width={390}
+                          height={844}
+                          className="w-full aspect-[9/19.5] object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-center text-[10px] text-white/25 tracking-wider uppercase font-medium">
+                    {screenshots[4].alt}
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
 
         {/* -------------------------------------------------------- */}
@@ -440,14 +534,14 @@ export default function TaskMindCaseStudy() {
               transition={{ duration: 0.8, ease: EASE }}
             >
               <p className="text-2xl sm:text-3xl md:text-4xl font-extralight text-white/60 leading-snug italic">
-                &ldquo;AI-Powered Research
+                &ldquo;Smart Flight Search,
                 <br />
-                at Scale&rdquo;
+                Simplified&rdquo;
               </p>
               <div className="mt-6 sm:mt-8 flex items-center gap-3">
                 <div className="w-8 h-px bg-white/15" />
                 <span className="text-xs sm:text-sm text-white/30 tracking-wider uppercase font-medium">
-                  taskmind.ai
+                  Airfare
                 </span>
               </div>
             </motion.div>
@@ -459,16 +553,17 @@ export default function TaskMindCaseStudy() {
               transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             >
               <p className="text-base sm:text-lg text-white/45 leading-relaxed font-light">
-                Led the architecture and full-stack development of an AI SaaS
-                platform that automates company research and competitive
-                analysis. Designed multi-model AI orchestration integrating
-                Google Gemini, Perplexity AI, and OpenAI to generate
-                citation-backed intelligence reports.
+                Built a complete flight search platform from the ground up
+                &mdash; a React Native app that searches across flexible date
+                combinations, tracks prices automatically, and helps travelers
+                find the cheapest flights with smart filtering and historical
+                price data.
               </p>
               <p className="mt-4 sm:mt-6 text-base sm:text-lg text-white/45 leading-relaxed font-light">
-                Built the complete infrastructure from JWT-authenticated REST
-                APIs and multi-tenant data isolation to Stripe subscription
-                billing and Google Cloud auto-scaling deployments.
+                Engineered the full backend with Node.js/Express and PostgreSQL,
+                integrated SerpAPI for real-time flight data, implemented Apple
+                In-App Purchases for a credits economy, and built automated
+                price tracking with push notifications.
               </p>
             </motion.div>
           </div>
@@ -556,7 +651,7 @@ export default function TaskMindCaseStudy() {
               transition={{ duration: 0.6 }}
             >
               <a
-                href="https://www.taskmind.pro/dashboard"
+                href="https://github.com/martinyis/flight-tracker"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-3 px-6 py-3
@@ -564,11 +659,11 @@ export default function TaskMindCaseStudy() {
                            hover:border-white/[0.3] hover:bg-white/[0.05]
                            transition-all duration-400"
               >
-                <svg className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                <svg className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                 </svg>
                 <span className="text-xs sm:text-sm text-white/40 tracking-[0.15em] uppercase font-medium group-hover:text-white/70 transition-colors duration-300">
-                  View Live
+                  View Source
                 </span>
               </a>
             </motion.div>

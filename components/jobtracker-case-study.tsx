@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -18,59 +19,84 @@ const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 /* DATA                                                                */
 /* ================================================================== */
 
-const TASKMIND_LETTERS = "TASKMIND".split("");
+const JOBTRACKER_LETTERS = "JOBTRACKER".split("");
 
 const contributions = [
   {
     num: "01",
-    title: "Full-Stack SaaS Architecture",
-    desc: "Led system design and architecture of a full-stack AI SaaS platform with Next.js, Node.js/Express, TypeScript, and MongoDB, designing 50+ RESTful API endpoints, multi-tenant data isolation, and role-based access control with JWT authentication.",
+    title: "AI Scoring Engine",
+    desc: "Built a 16-dimension AI scoring engine using NVIDIA's API that evaluates each job posting against skills, experience, preferences, and cultural fit \u2014 producing weighted composite scores for intelligent ranking.",
   },
   {
     num: "02",
-    title: "Multi-Model AI Orchestration",
-    desc: "Engineered a multi-model AI orchestration layer integrating Google Gemini, Perplexity AI, and OpenAI APIs to automate company research, competitive analysis, and market intelligence generation.",
+    title: "LinkedIn Scraping Pipeline",
+    desc: "Engineered a Playwright-based LinkedIn scraping pipeline with 4 background agents, anti-detection measures, session management, and rate limiting for reliable automated job discovery.",
   },
   {
     num: "03",
-    title: "RAG Pipeline & Intelligence Engine",
-    desc: "Implemented a retrieval-augmented generation (RAG) pipeline that enriches LLM prompts with company profiles, historical report data, and industry context, producing citation-backed research outputs across 10+ report categories.",
+    title: "Multi-Layer Filtering System",
+    desc: "Designed 6 AI filter layers that progressively refine raw job listings through relevance, quality, duplicate detection, and preference matching before presenting curated results.",
   },
   {
     num: "04",
-    title: "Stripe Subscription Infrastructure",
-    desc: "Built end-to-end Stripe subscription infrastructure with tiered pricing, promotional codes, usage-based metering, and a customer self-service portal, handling the full payment lifecycle for a multi-tenant SaaS product.",
+    title: "Real-Time Analytics Dashboard",
+    desc: "Built an EJS-based dashboard with Chart.js visualizations showing application funnel metrics, score distributions, source analytics, and timeline tracking across all job applications.",
   },
   {
     num: "05",
-    title: "GCP Deployment & CI/CD",
-    desc: "Deployed to Google Cloud Platform using App Engine with auto-scaling (1\u201310 instances) and established CI/CD pipelines via Cloud Build for automated TypeScript compilation, health checks, and zero-downtime production deployments.",
+    title: "Command Center & Automation",
+    desc: "Implemented a command center with one-click batch operations, Telegram bot notifications, PDF resume parsing, and automated application tracking with status management.",
   },
 ];
 
 const stats = [
-  { value: 50, suffix: "+", label: "API Endpoints" },
-  { value: 10, suffix: "+", label: "Report Categories" },
-  { value: 3, suffix: "", label: "AI Models Integrated" },
-  { value: 10, suffix: "", label: "Auto-Scale Instances" },
-  { value: 100, suffix: "%", label: "Uptime Target" },
+  { value: 340, suffix: "+", label: "Jobs Tracked" },
+  { value: 16, suffix: "", label: "Scoring Dimensions" },
+  { value: 6, suffix: "", label: "AI Filter Layers" },
+  { value: 4, suffix: "", label: "Background Agents" },
+  { value: 250, suffix: "", label: "Applications" },
 ];
 
 const techTags = [
-  "Next.js",
+  "TypeScript",
   "Node.js",
   "Express",
-  "TypeScript",
-  "MongoDB",
-  "Google Gemini",
-  "Perplexity AI",
-  "OpenAI API",
-  "Stripe",
-  "GCP",
-  "App Engine",
-  "Cloud Build",
-  "JWT Auth",
-  "REST APIs",
+  "SQLite",
+  "Prisma",
+  "Playwright",
+  "NVIDIA AI",
+  "EJS",
+  "Chart.js",
+  "Telegram API",
+  "Winston",
+  "pdf-parse",
+];
+
+const screenshots = [
+  {
+    src: "/images/jobtracker-dashboard.png",
+    alt: "JobTracker Dashboard",
+    label: "Dashboard",
+    urlText: "jobtracker/dashboard",
+  },
+  {
+    src: "/images/jobtracker-jobs.png",
+    alt: "JobTracker Job Listings",
+    label: "Job Listings",
+    urlText: "jobtracker/jobs",
+  },
+  {
+    src: "/images/jobtracker-analytics.png",
+    alt: "JobTracker Analytics",
+    label: "Analytics",
+    urlText: "jobtracker/analytics",
+  },
+  {
+    src: "/images/jobtracker-command-center.png",
+    alt: "JobTracker Command Center",
+    label: "Command Center",
+    urlText: "jobtracker/command-center",
+  },
 ];
 
 /* ================================================================== */
@@ -217,10 +243,10 @@ function LetterReveal({
   return (
     <div
       className="flex items-center justify-center gap-[0.1em] sm:gap-[0.2em] md:gap-[0.35em]"
-      aria-label="TASKMIND"
+      aria-label="JOBTRACKER"
     >
-      {TASKMIND_LETTERS.map((letter, i) => {
-        const start = i * 0.07;
+      {JOBTRACKER_LETTERS.map((letter, i) => {
+        const start = i * 0.06;
         const end = start + 0.15;
         return (
           <LetterChar
@@ -264,26 +290,20 @@ function LetterChar({
 }
 
 /* ================================================================== */
-/* BROWSER VIDEO                                                       */
+/* BROWSER SCREENSHOT                                                  */
 /* ================================================================== */
 
-function BrowserVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { margin: "-10% 0px -10% 0px" });
-
-  useEffect(() => {
-    if (!ref.current) return;
-    if (isInView) {
-      ref.current.play().catch(() => {});
-    } else {
-      ref.current.pause();
-    }
-  }, [isInView]);
-
+function BrowserScreenshot({
+  src,
+  alt,
+  urlText,
+}: {
+  src: string;
+  alt: string;
+  urlText: string;
+}) {
   return (
     <motion.div
-      ref={containerRef}
       initial={{ opacity: 0, scale: 0.92 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -301,19 +321,17 @@ function BrowserVideo({ src }: { src: string }) {
           <div className="flex-1 mx-4">
             <div className="mx-auto max-w-xs h-5 rounded-md bg-white/[0.04] flex items-center justify-center">
               <span className="text-[10px] text-white/20 tracking-wider font-medium">
-                taskmind.ai
+                {urlText}
               </span>
             </div>
           </div>
           <div className="w-14" />
         </div>
-        <video
-          ref={ref}
+        <Image
           src={src}
-          muted
-          loop
-          playsInline
-          preload="metadata"
+          alt={alt}
+          width={1920}
+          height={1080}
           className="w-full aspect-video object-cover"
         />
       </div>
@@ -353,7 +371,7 @@ function BackNav() {
 /* MAIN CASE STUDY                                                     */
 /* ================================================================== */
 
-export default function TaskMindCaseStudy() {
+export default function JobTrackerCaseStudy() {
   const letterSectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: letterProgress } = useScroll({
     target: letterSectionRef,
@@ -381,7 +399,7 @@ export default function TaskMindCaseStudy() {
             className="mb-6 sm:mb-10"
           >
             <span className="text-[10px] sm:text-xs text-white/20 tracking-[0.35em] uppercase font-medium">
-              Team Lead Software Engineer / Startup
+              Personal Project / Web App / 2025
             </span>
           </motion.div>
 
@@ -393,26 +411,34 @@ export default function TaskMindCaseStudy() {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="mt-6 sm:mt-8 text-sm sm:text-base text-white/25 tracking-[0.3em] uppercase font-light"
           >
-            AI-Powered Research Platform
+            AI-Powered Job Search Agent
           </motion.p>
         </div>
 
         {/* -------------------------------------------------------- */}
-        {/* WEB PLATFORM VIDEO                                       */}
+        {/* SCREENSHOTS                                              */}
         {/* -------------------------------------------------------- */}
-        <div className="relative px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 pb-20 sm:pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-8 sm:mb-12 text-center"
-          >
-            <span className="text-[10px] sm:text-xs text-white/20 tracking-[0.35em] uppercase font-medium">
-              Web Platform
-            </span>
-          </motion.div>
-          <BrowserVideo src="/videos/TASKMIND.mp4" />
+        <div className="relative px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 pb-20 sm:pb-32 space-y-12 sm:space-y-16">
+          {screenshots.map((screenshot) => (
+            <div key={screenshot.src}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="mb-8 sm:mb-12 text-center"
+              >
+                <span className="text-[10px] sm:text-xs text-white/20 tracking-[0.35em] uppercase font-medium">
+                  {screenshot.label}
+                </span>
+              </motion.div>
+              <BrowserScreenshot
+                src={screenshot.src}
+                alt={screenshot.alt}
+                urlText={screenshot.urlText}
+              />
+            </div>
+          ))}
         </div>
 
         {/* -------------------------------------------------------- */}
@@ -440,14 +466,14 @@ export default function TaskMindCaseStudy() {
               transition={{ duration: 0.8, ease: EASE }}
             >
               <p className="text-2xl sm:text-3xl md:text-4xl font-extralight text-white/60 leading-snug italic">
-                &ldquo;AI-Powered Research
+                &ldquo;Intelligent Job Search,
                 <br />
-                at Scale&rdquo;
+                Automated&rdquo;
               </p>
               <div className="mt-6 sm:mt-8 flex items-center gap-3">
                 <div className="w-8 h-px bg-white/15" />
                 <span className="text-xs sm:text-sm text-white/30 tracking-wider uppercase font-medium">
-                  taskmind.ai
+                  JobTracker
                 </span>
               </div>
             </motion.div>
@@ -459,16 +485,15 @@ export default function TaskMindCaseStudy() {
               transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
             >
               <p className="text-base sm:text-lg text-white/45 leading-relaxed font-light">
-                Led the architecture and full-stack development of an AI SaaS
-                platform that automates company research and competitive
-                analysis. Designed multi-model AI orchestration integrating
-                Google Gemini, Perplexity AI, and OpenAI to generate
-                citation-backed intelligence reports.
+                Built an autonomous job search platform that scrapes LinkedIn,
+                scores postings across 16 dimensions using NVIDIA AI, and
+                manages the complete application pipeline &mdash; from discovery
+                to tracking.
               </p>
               <p className="mt-4 sm:mt-6 text-base sm:text-lg text-white/45 leading-relaxed font-light">
-                Built the complete infrastructure from JWT-authenticated REST
-                APIs and multi-tenant data isolation to Stripe subscription
-                billing and Google Cloud auto-scaling deployments.
+                Engineered the full system with Node.js/Express, Playwright for
+                browser automation, SQLite with Prisma ORM, and a real-time
+                dashboard with Chart.js analytics and Telegram notifications.
               </p>
             </motion.div>
           </div>
@@ -556,7 +581,7 @@ export default function TaskMindCaseStudy() {
               transition={{ duration: 0.6 }}
             >
               <a
-                href="https://www.taskmind.pro/dashboard"
+                href="https://github.com/martinyis/job-tracker"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-3 px-6 py-3
@@ -564,11 +589,11 @@ export default function TaskMindCaseStudy() {
                            hover:border-white/[0.3] hover:bg-white/[0.05]
                            transition-all duration-400"
               >
-                <svg className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                <svg className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                 </svg>
                 <span className="text-xs sm:text-sm text-white/40 tracking-[0.15em] uppercase font-medium group-hover:text-white/70 transition-colors duration-300">
-                  View Live
+                  View Source
                 </span>
               </a>
             </motion.div>
